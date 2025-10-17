@@ -34,13 +34,16 @@ export default {
                 }
             });
 
-            const reply = await interaction.reply({
-                content: `✅ **${voiceChannel.name}** のステータスを以下    に設定しました：\n\`\`\`\n${status}\n\`\`\``,
-                flags: MessageFlags.Ephemeral
-            });
+            // まだ返信していない場合のみ返信
+            if (!interaction.replied && !interaction.deferred) {
+                const reply = await interaction.reply({
+                    content: `✅ **${voiceChannel.name}** のステータスを以下に設定しました：\n\`\`\`\n${status}\n\`\`\``,
+                    flags: MessageFlags.Ephemeral
+                });
 
-            // 3秒後に自動削除
-            setTimeout(() => reply.delete().catch(() => {}), 3000);
+                // 3秒後に自動削除
+                setTimeout(() => reply.delete().catch(() => {}), 3000);
+            }
 
             console.log(`✏️ ステータス変更: ${voiceChannel.name} -> "${status}" (実行者: ${interaction.user.tag})`);
         } catch (error) {
@@ -54,6 +57,8 @@ export default {
             let reply;
             if (interaction.replied) {
                 reply = await interaction.followUp(errorResponse);
+            } else if (interaction.deferred) {
+                reply = await interaction.editReply(errorResponse);
             } else {
                 reply = await interaction.reply(errorResponse);
             }

@@ -1,5 +1,7 @@
 // handlers/commandHandler.mjs - スラッシュコマンドの処理
 
+import { MessageFlags } from 'discord.js';
+
 export async function handleInteraction(interaction) {
     if (!interaction.isChatInputCommand()) return;
 
@@ -9,7 +11,7 @@ export async function handleInteraction(interaction) {
         console.error(`❌ コマンド "${interaction.commandName}" が見つかりません`);
         await interaction.reply({
             content: '❌ そのコマンドは見つかりません',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         });
         return;
     }
@@ -21,7 +23,7 @@ export async function handleInteraction(interaction) {
         console.error(`❌ コマンド実行エラー (${interaction.commandName}):`, error);
         const response = {
             content: '❌ コマンド実行中にエラーが発生しました',
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         };
 
         if (interaction.replied) {
