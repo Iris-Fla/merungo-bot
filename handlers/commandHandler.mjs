@@ -1,7 +1,7 @@
 // handlers/commandHandler.mjs - スラッシュコマンドの処理
 
 export async function handleInteraction(interaction) {
-    if (!interaction.isCommand()) return;
+    if (!interaction.isChatInputCommand()) return;
 
     const command = interaction.client.commands.get(interaction.commandName);
 

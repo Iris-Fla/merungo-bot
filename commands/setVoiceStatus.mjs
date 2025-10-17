@@ -35,7 +35,7 @@ export default {
             });
 
             const reply = await interaction.reply({
-                content: `✅ **${voiceChannel.name}** のステータスを以下に設定しました：\n\`\`\`\n${status}\n\`\`\``,
+                content: `✅ **${voiceChannel.name}** のステータスを以下    に設定しました：\n\`\`\`\n${status}\n\`\`\``,
                 flags: MessageFlags.Ephemeral
             });
 
@@ -46,10 +46,17 @@ export default {
         } catch (error) {
             console.error('❌ ステータス変更に失敗しました:', error);
 
-            const reply = await interaction.reply({
+            const errorResponse = {
                 content: `❌ ステータスの変更に失敗しました。\n\`\`\`\n${error.message}\n\`\`\``,
                 flags: MessageFlags.Ephemeral
-            });
+            };
+
+            let reply;
+            if (interaction.replied) {
+                reply = await interaction.followUp(errorResponse);
+            } else {
+                reply = await interaction.reply(errorResponse);
+            }
 
             // 3秒後に自動削除
             setTimeout(() => reply.delete().catch(() => {}), 3000);
