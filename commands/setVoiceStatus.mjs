@@ -6,7 +6,6 @@ export default {
     data: new SlashCommandBuilder()
         .setName('sv')
         .setDescription('ボイスチャンネルのステータスを設定します')
-        .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
         .addChannelOption(option =>
             option
                 .setName('チャンネル')
